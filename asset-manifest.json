@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/zentro/static/css/main.ba88faaa.css",
-    "main.js": "/zentro/static/js/main.ee8ac51b.js",
+    "main.css": "/zentro/static/css/main.6f5b46c9.css",
+    "main.js": "/zentro/static/js/main.07232360.js",
     "static/media/hero.png": "/zentro/static/media/hero.5833a278a9144fccf2ff.png",
     "index.html": "/zentro/index.html",
-    "main.ba88faaa.css.map": "/zentro/static/css/main.ba88faaa.css.map",
-    "main.ee8ac51b.js.map": "/zentro/static/js/main.ee8ac51b.js.map"
+    "main.6f5b46c9.css.map": "/zentro/static/css/main.6f5b46c9.css.map",
+    "main.07232360.js.map": "/zentro/static/js/main.07232360.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba88faaa.css",
-    "static/js/main.ee8ac51b.js"
+    "static/css/main.6f5b46c9.css",
+    "static/js/main.07232360.js"
   ]
 }
