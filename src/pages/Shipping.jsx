@@ -322,7 +322,7 @@ const Shipping  = () => {
               <h3 className="text-md font-semibold text-gray-700 mb-3">
                 Contact Information
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3">
                 <input
                   type="text"
                   name="name"
@@ -337,13 +337,20 @@ const Shipping  = () => {
                   placeholder="Mobile number"
                   className="border border-gray-300 w-full h-10 rounded-md outline-none px-4 focus:border-blue-400"
                 />
+                <input
+                  type="text"
+                  name="email"
+                  defaultValue={sh?.email}
+                  placeholder="Email"
+                  className="border border-gray-300 w-full h-10 rounded-md outline-none px-4 focus:border-blue-400"
+                />
               </div>
             </div>
 
             {/* Address Section */}
             <div className="mb-6">
               <h3 className="text-md font-semibold text-gray-700 mb-3">Address</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 <input
                   type="text"
                   name="address"
@@ -356,7 +363,7 @@ const Shipping  = () => {
                   name="state"
                   defaultValue={sh?.state}
                   placeholder="State"
-                  className="border border-gray-300 w-full h-10 rounded-md outline-none px-4 focus:border-blue-400"
+                  className="border border-gray-300 w-full h-10 rounded-md outline-none px-4 focus:border-blue-400 col-span-1"
                 />
                 <input
                   type="text"

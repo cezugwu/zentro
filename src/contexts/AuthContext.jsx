@@ -1,6 +1,6 @@
 import { createContext, useEffect } from 'react'
 import { useMutation } from "@tanstack/react-query";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BASE_API_URL } from '../utilis/config';
 
 export const AuthContext = createContext();
@@ -9,11 +9,12 @@ const REFRESH_INTERVAL = 60 * 60 * 4 * 1000;
 
 const AuthProvider = ({children}) => {
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("access");
         if (token && location.pathname === "/login") {
-            window.location.href = "https://cezugwu.github.io/zentro/";
+            navigate('/')
         }
     }, [location.pathname]);
 
@@ -43,8 +44,8 @@ const AuthProvider = ({children}) => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || "Login failed");
 
-        localStorage.setItem("access", data.access);
-        localStorage.setItem("refresh", data.refresh);
+            localStorage.setItem("access", data.access);
+            localStorage.setItem("refresh", data.refresh);
         },
         onSuccess: () => {
             return;
@@ -67,14 +68,12 @@ const AuthProvider = ({children}) => {
 
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || "Refresh failed");
-
-        localStorage.setItem("access", data.access);
-        localStorage.setItem("refresh", data.refresh);
+            localStorage.setItem("access", data.access);
+            localStorage.setItem("refresh", data.refresh);
         },
         onError: (err) => {
             localStorage.removeItem("access");
             localStorage.removeItem("refresh");
-            window.location.href = "/"; 
         },
     });
 
@@ -89,7 +88,7 @@ const AuthProvider = ({children}) => {
         return () => {
             if (interval) clearInterval(interval);
         };
-    }, [localStorage.getItem('access')]);
+    }, []);
 
     return(
         <AuthContext.Provider value={{loginMutation}}>

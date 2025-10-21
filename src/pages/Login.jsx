@@ -20,7 +20,7 @@ const Login = () => {
         onSuccess: () => {
           setSuccessMessage("Login successful!");
           setTimeout(() => {
-            window.location.href = "https://cezugwu.github.io/zentro/";
+            window.location.href = "/";
           }, 2000);
         },
         onError: () => {
