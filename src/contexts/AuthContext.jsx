@@ -13,7 +13,7 @@ const AuthProvider = ({children}) => {
     useEffect(() => {
         const token = localStorage.getItem("access");
         if (token && location.pathname === "/login") {
-            window.location.href = "/";
+            window.location.href = "https://cezugwu.github.io/zentro/";
         }
     }, [location.pathname]);
 

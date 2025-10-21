@@ -253,7 +253,7 @@ const Header = () => {
               <div className={`absolute top-8 w-[230px] bg-white duration-500 ${profileMenu ? ' opacity-100 visible left-1 lg:-left-8 -translate-x-1/2' : 'left-[-100%] opacity-0 invisible'}`}><ProfileMenu /></div>
             </div> 
             : 
-            <><div className='text-[0.9em] font-medium cursor-pointer select-none'>Log in</div><div className='bg-pink-700/50 px-3 py-2 rounded-md text-white text-[0.9em] font-medium cursor-pointer select-none'>Sign up</div></>
+            <><div onClick={() => navigate('/login')} className='text-[0.9em] font-medium cursor-pointer select-none'>Log in</div><div onClick={() => navigate('/register')} className='bg-pink-700/50 px-3 py-2 rounded-md text-white text-[0.9em] font-medium cursor-pointer select-none'>Sign up</div></>
           }
         <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`)}}} className='cursor-pointer select-none text-gray-500 fill-blue-600' />
         <Menu ref={categoryRef} onClick={() => setNavbar(!navbar)} className='cursor-pointer select-none lg:hidden' />
