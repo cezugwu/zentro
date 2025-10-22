@@ -11,7 +11,7 @@ const ProfileMenu = () => {
     <div  className='border rounded-md shadow-2xl'>
       {/* MAIN MENU */}
       <div className="py-4 border-b border-gray-200">
-        <ul className="flex flex-col gap-3 px-6 text-gray-700 text-sm md:text-base">
+        <ul className="flex flex-col gap-3 px-6 text-gray-700">
           <li
             className="flex items-center gap-3 hover:bg-gray-100 rounded-lg py-2 px-2 cursor-pointer transition-all duration-200"
           >
@@ -42,7 +42,7 @@ const ProfileMenu = () => {
       </div>
 
       {/* SETTINGS SECTION */}
-      <div className="py-4 px-6 text-gray-600 text-sm md:text-base flex flex-col gap-3">
+      <div className="py-4 px-6 text-gray-600 flex flex-col gap-3">
         <div className="hover:text-red-500 hover:underline cursor-pointer transition-colors">
           Settings
         </div>
@@ -52,7 +52,7 @@ const ProfileMenu = () => {
         <div className="hover:text-red-500 hover:underline cursor-pointer transition-colors">
           DS Center
         </div>
-        <div onClick={() => {localStorage.removeItem('refresh'); localStorage.removeItem('access'); window.location.href = "/"; }} className="pt-2 mt-2 border-t border-gray-200 text-red-500 font-medium hover:text-red-600 cursor-pointer transition-colors">Logout</div>
+        <div onClick={() => {localStorage.removeItem('refresh'); localStorage.removeItem('access'); window.location.href = "/zentro"; }} className="pt-2 mt-2 border-t border-gray-200 text-red-500 font-medium hover:text-red-600 cursor-pointer transition-colors">Logout</div>
       </div>
     </div>
   );

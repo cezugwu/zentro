@@ -158,11 +158,14 @@ const CartItem = ({ item }) => {
 
   return (
     <div className="grid grid-cols-[4fr_1fr_1fr] items-center justify-between gap-4 py-3 border-b last:border-none text-gray-800 hover:bg-gray-50 transition-all duration-150">
-      <div className='flex gap-2 items-center justify-center'>
-        <X onClick={() => mutationDelete.mutate({ slug })} className='w-4 h-4 cursor-pointer select-none hover:scale-[1.4] hover:text-red-600 duration-300' />
-        <img src={`${BASE_IMAGE_URL}/${image}`} className='w-[100px] aspect-square object-cover rounded-md' alt="" />
-        <h1 className='flex-1 font-medium'>{title?.slice(0,30)+' . . .'}</h1>
-      </div>
+<div className="flex gap-2 items-center all group">
+  <X onClick={() => mutationDelete.mutate({ slug })} className="w-4 h-4 cursor-pointer select-none hover:scale-[1.4] hover:text-red-600 duration-300" />
+
+  <img src={`${BASE_IMAGE_URL}/${image}`} className="w-[50px] aspect-square object-cover rounded-md border border-gray-400" />
+
+  <h1 title={title}  className="flex-1 max-w-[180px] text-sm text-gray-800 hover:text-blue-600 transition-colors duration-200" >{title}</h1>
+</div>
+
 
       {/* Price */}
       <div className="text-gray-600 text-center">${parseFloat(price).toFixed(2)}</div>

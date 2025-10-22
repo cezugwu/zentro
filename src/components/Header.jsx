@@ -51,7 +51,8 @@ const Header = () => {
       } else {
         setHeader(false);
       }
-    }
+    } 
+    scrollPosition();
     window.addEventListener('scroll', scrollPosition)
 
     return () => {
@@ -112,10 +113,7 @@ const Header = () => {
   const [searchParams] = useSearchParams();
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(e.target)
-      ) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
         setSearch(false);
       }
     };
@@ -129,7 +127,21 @@ const Header = () => {
   }, []); 
 
   const [profileMenu, setProfileMenu] = useState(false);
+  const profileMenuRef = useRef(null);
   const timeoutRefMenu = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setProfileMenu(false);
+      }
+    };
+
+    window.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleMouseEnterMenu = () => {
     if (timeoutRefMenu.current) {
@@ -144,6 +156,7 @@ const Header = () => {
       setProfileMenu(false);
     }, 400);
   };
+
 
   return ( 
     <div className={`w-full h-16 fixed z-20 top-0 flex justify-between px-8 items-center font-jost duration-500 ${header ? 'bg-white shadow-2xl' : ''}`}>   
@@ -245,17 +258,17 @@ const Header = () => {
         ))}
       </div>
 
-      <div className='flex items-center gap-3'>
+      <div className='flex items-center gap-4'>
         <Search onClick={() => {setSearch(true); if (inputRef.current) {inputRef.current.focus()}}} className='cursor-pointer select-none text-blue-600' />
           {localStorage.getItem('access') ? 
-            <div ref={timeoutRefMenu} className='relative' onClick={() => handleMouseEnterMenu()} onMouseEnter={() => handleMouseEnterMenu()} onMouseLeave={() => handleMouseLeaveMenu()}>
-              <UserRound onClick={() => setProfileMenu(!profileMenu)} className='cursor-pointer select-none fill-red-400 text-red-400' />
+            <div ref={profileMenuRef} className='relative' onClick={() => handleMouseEnterMenu()} onMouseEnter={() => handleMouseEnterMenu()} onMouseLeave={() => handleMouseLeaveMenu()}>
+              <UserRound className='cursor-pointer select-none fill-red-400 text-red-400' />
               <div className={`absolute top-8 w-[230px] bg-white duration-500 ${profileMenu ? ' opacity-100 visible left-1 lg:-left-8 -translate-x-1/2' : 'left-[-100%] opacity-0 invisible'}`}><ProfileMenu /></div>
             </div> 
             : 
             <><div onClick={() => navigate('/login')} className='text-[0.9em] font-medium cursor-pointer select-none'>Log in</div><div onClick={() => navigate('/register')} className='bg-pink-700/50 px-3 py-2 rounded-md text-white text-[0.9em] font-medium cursor-pointer select-none'>Sign up</div></>
           }
-        <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`)}}} className='cursor-pointer select-none text-gray-500 fill-blue-600' />
+        <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`)}}} className='cursor-pointer select-none text-gray-500 fill-gray-500' />
         <Menu ref={categoryRef} onClick={() => setNavbar(!navbar)} className='cursor-pointer select-none lg:hidden' />
       </div>
 

@@ -47,12 +47,6 @@ const AuthProvider = ({children}) => {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
         },
-        onSuccess: () => {
-            return;
-        },
-        onError: () => {
-          return;
-        },
     });
 
     const refreshMutation = useMutation({
@@ -77,7 +71,8 @@ const AuthProvider = ({children}) => {
         },
     });
 
-    useEffect(() => {
+    useEffect(() => { 
+        let timeOut = setTimeout(() => {refreshMutation.mutate();}, 0)
         let interval;
         if (localStorage.getItem('access')) {
             interval = setInterval(() => {
@@ -87,6 +82,7 @@ const AuthProvider = ({children}) => {
 
         return () => {
             if (interval) clearInterval(interval);
+            clearTimeout(timeOut);
         };
     }, []);
 
