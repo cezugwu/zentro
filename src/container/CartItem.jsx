@@ -163,7 +163,7 @@ const CartItem = ({ item }) => {
 <div className="flex gap-2 items-center all group">
   <X onClick={() => mutationDelete.mutate({ slug })} className="w-4 h-4 cursor-pointer select-none hover:scale-[1.4] hover:text-red-600 duration-300" />
 
-  <img src={`${BASE_IMAGE_URL}/${image}`} className="w-[50px] aspect-square object-cover rounded-md border border-gray-400" />
+  <img src={`${BASE_IMAGE_URL}/${image}`} className="w-16 aspect-square object-cover rounded-md border border-gray-400" />
 
   <h1 onClick={() => navigate(`/product/${slug}`)} className="flex-1 max-w-[180px] text-sm text-gray-800 hover:text-blue-600 transition-colors duration-200 cursor-pointer" >{title}</h1>
 </div>

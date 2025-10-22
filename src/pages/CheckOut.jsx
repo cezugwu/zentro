@@ -114,7 +114,7 @@ const CheckOut = () => {
                     {/* CART SUMMARY */}
                     <div className="border-2 border-gray-200 rounded-2xl bg-white shadow-sm">
                         {cart?.link && <div className='p-2 flex items-center justify-end gap-1 text-green-500 hover:underline rounded-t-2xl w-fit cursor-pointer select-none'>Payment Pending <Link className='w-4 h-4' /></div>}
-                        <div className="grid grid-cols-[5fr_1fr_1fr] items-center p-3 font-semibold text-gray-600 bg-gray-50">
+                        <div className="grid grid-cols-[5fr_1fr_1fr] items-center p-3 font-semibold text-gray-600 bg-gray-50 rounded-2xl">
                             <div>Products</div>
                             <div>Price</div>
                             <div className="text-right">Quantity</div>
@@ -149,9 +149,9 @@ const CheckOut = () => {
 
                     <button
                         onClick={() => mutationFlutterPay.mutate()}
-                        disabled={!shipping || !cart?.length === 0}
+                        disabled={!shipping || cart?.cartitem?.length === 0}
                         className={`w-full py-3 rounded-xl font-medium transition ${
-                            !shipping || !cart?.length === 0
+                            !shipping || cart?.cartitem?.length === 0
                                 ? 'bg-blue-300 cursor-not-allowed text-white'
                                 : 'bg-blue-500 hover:bg-blue-600 text-white'
                         }`}
@@ -160,9 +160,9 @@ const CheckOut = () => {
                     </button>
 
                     <button
-                        disabled={!shipping || !cart?.length === 0}
+                        disabled={!shipping || cart?.cartitem?.length === 0}
                         className={`w-full py-3 rounded-xl font-medium transition ${
-                            !shipping || !cart?.length === 0
+                            !shipping || cart?.cartitem?.length === 0
                                 ? 'bg-red-300 cursor-not-allowed text-white'
                                 : 'bg-red-500 hover:bg-red-600 text-white'
                         }`}
@@ -171,9 +171,9 @@ const CheckOut = () => {
                     </button>
 
                     <button
-                        disabled={!shipping || !cart?.length === 0}
+                        disabled={!shipping || cart?.cartitem?.length === 0}
                         className={`w-full py-3 rounded-xl font-medium transition ${
-                            !shipping || !cart?.length === 0
+                            !shipping || cart?.cartitem?.length === 0
                                 ? 'bg-gray-300 cursor-not-allowed text-white'
                                 : 'bg-gray-700 hover:bg-gray-800 text-white'
                         }`}

@@ -53,7 +53,7 @@ const Register = () => {
         onSuccess: () => {
           setSuccessMessage("Registration successful!");
           setTimeout(() => {
-            window.location.href = "Ecommerce/#/login";
+            window.location.href = "zentro/#/login";
           }, 2000);
         },
         onError: () => {

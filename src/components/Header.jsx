@@ -225,7 +225,7 @@ const Header = () => {
 
       </div>
 
-      <div className='text-[1.2em] md:text-[1.4em] lg:text-[1.6em] font-bold text-blue-900'>Zentr<span className='text-red-500'>o</span></div>
+      <div onClick={() => {if (location.pathname !== '/') {navigate('/')}}} className='cursor-pointer text-[1.2em] md:text-[1.4em] lg:text-[1.6em] font-bold text-blue-900'>Zentr<span className='text-red-500'>o</span></div>
 
       <div className='lg:flex gap-5 w-fit items-center hidden '>
         {navbarItems.map((item) => (
