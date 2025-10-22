@@ -106,7 +106,7 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT: Checkout Summary */}
-        <div className="md:w-[35%] border-2 border-gray-200 rounded-xl shadow-sm p-6 flex flex-col gap-4 justify-center items-center">
+        <div className="md:w-[35%] border-2 border-gray-200 rounded-xl shadow-sm p-6 flex flex-col gap-4 justify-center items-center h-fit">
           <h3 className="text-lg font-semibold text-gray-700">Order Summary</h3>
 
           <div className="w-full flex justify-between text-gray-600">

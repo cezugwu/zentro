@@ -3,10 +3,12 @@ import { FaCaretUp, FaCaretDown } from "react-icons/fa";
 import { X } from 'lucide-react';
 import { useQueryClient, useMutation} from '@tanstack/react-query';
 import { BASE_IMAGE_URL, BASE_URL } from '../utilis/config';
+import { useNavigate } from 'react-router-dom';
 
 const CartItem = ({ item }) => {
   const { title, image, price, slug } = item?.product;
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const guest = localStorage.getItem("guest")
   const token = localStorage.getItem("access");
@@ -163,7 +165,7 @@ const CartItem = ({ item }) => {
 
   <img src={`${BASE_IMAGE_URL}/${image}`} className="w-[50px] aspect-square object-cover rounded-md border border-gray-400" />
 
-  <h1 title={title}  className="flex-1 max-w-[180px] text-sm text-gray-800 hover:text-blue-600 transition-colors duration-200" >{title}</h1>
+  <h1 onClick={() => navigate(`/product/${slug}`)} className="flex-1 max-w-[180px] text-sm text-gray-800 hover:text-blue-600 transition-colors duration-200 cursor-pointer" >{title}</h1>
 </div>
 
 
