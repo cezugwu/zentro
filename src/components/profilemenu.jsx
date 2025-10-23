@@ -5,14 +5,16 @@ import {
 } from "react-icons/ri";
 import { MdOutlineMessage } from "react-icons/md";
 import { FaRegHeart, FaRegFile } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const ProfileMenu = () => {
+  const navigate = useNavigate();
   return (
     <div  className='border rounded-md shadow-2xl'>
       {/* MAIN MENU */}
       <div className="py-4 border-b border-gray-200">
         <ul className="flex flex-col gap-3 px-6 text-gray-700">
-          <li
+          <li onClick={() => navigate('/order')}
             className="flex items-center gap-3 hover:bg-gray-100 rounded-lg py-2 px-2 cursor-pointer transition-all duration-200"
           >
             <FaRegFile className="text-red-500 text-lg" />

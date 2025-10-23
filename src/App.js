@@ -11,6 +11,7 @@ import AuthProvider from './contexts/AuthContext';
 import Pending from './pages/Pending';
 import Register from './pages/Register';
 import Shipping from './pages/Shipping';
+import OrderPage from './pages/OrderPage';
 
 const App = () => {
   return (
@@ -31,7 +32,8 @@ const App = () => {
                     <Route path='register' element={<Register />} />
                     <Route path='checkout' element={<CheckOut />} />
                     <Route path='pending' element={<Pending />} />
-                    <Route path='shipping' element={<Shipping/>} />
+                    <Route path='shipping' element={<Shipping />} />
+                     <Route path='order' element={<OrderPage />} />
                   </Routes>
                 </>
               } />

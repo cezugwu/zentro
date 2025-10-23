@@ -117,7 +117,7 @@ const Header = () => {
         setSearch(false);
       }
     };
-    setInputSearch(searchParams.get('q'));
+    setInputSearch(searchParams.get('q') || '');
     window.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("scroll", handleClickOutside);
     return () => {

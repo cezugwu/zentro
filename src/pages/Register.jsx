@@ -2,9 +2,10 @@ import { useState } from "react";
 import { UserPlus, CheckCircle2, AlertCircle, Mail, Lock } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { BASE_URL } from "../utilis/config";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const loginMutation = useMutation({
     mutationFn: async (credentials) => {
     const res = await fetch(`${BASE_URL}/signup/`, {
@@ -53,7 +54,7 @@ const Register = () => {
         onSuccess: () => {
           setSuccessMessage("Registration successful!");
           setTimeout(() => {
-            window.location.href = "zentro/#/login";
+            window.location.href = "#/login";
           }, 2000);
         },
         onError: () => {
@@ -179,14 +180,9 @@ const Register = () => {
           </button>
         </form>
 
-        <p className="text-gray-600 text-sm text-center mt-6">
+        <p className="text-gray-600 text-sm text-center mt-6 flex gap-[1px]">
           Already have an account?{" "}
-          <a
-            href="/#/login"
-            className="text-blue-600 font-medium hover:underline transition-all"
-          >
-            Login
-          </a>
+          <div onClick={() => navigate('/login')} className=" cursor-pointer text-blue-600 font-medium hover:underline transition-all">Login</div>
         </p>
       </div>
     </div>

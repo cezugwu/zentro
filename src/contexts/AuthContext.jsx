@@ -5,7 +5,7 @@ import { BASE_API_URL } from '../utilis/config';
 
 export const AuthContext = createContext();
 
-const REFRESH_INTERVAL = 60 * 60 * 4 * 1000;
+const REFRESH_INTERVAL = 60 * 4 * 1000;
 
 const AuthProvider = ({children}) => {
     const location = useLocation();
