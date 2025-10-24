@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Menu, Search, ShoppingCart, Home, ShoppingBag, Grid, Tag, Sparkles, Info, Phone, ChevronDown, User, UserRound,} from 'lucide-react';
 import ProfileMenu from './profilemenu';
+import { CartContext } from '../contexts/CartContext';
 
 export const navbarItems = [
   { name: "Home", link: "/", icon: <Home className="w-6 h-6 text-gray-500" /> },
@@ -42,6 +43,8 @@ export const categories = [
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const {cart} = useContext(CartContext)
+
 
   const [header, setHeader] = useState(false);
   useEffect(() => {
@@ -225,7 +228,7 @@ const Header = () => {
 
       </div>
 
-      <div onClick={() => {if (location.pathname !== '/') {navigate('/')}}} className='cursor-pointer text-[1.2em] md:text-[1.4em] lg:text-[1.6em] font-bold text-blue-900'>Zentr<span className='text-red-500'>o</span></div>
+      <div onClick={() => {if (location.pathname !== '/') {navigate('/'); window.scrollTo(0, 0)}}} className='cursor-pointer text-[1.2em] md:text-[1.4em] lg:text-[1.6em] font-bold text-blue-900'>Zentr<span className='text-red-500'>o</span></div>
 
       <div className='lg:flex gap-5 w-fit items-center hidden '>
         {navbarItems.map((item) => (
@@ -268,7 +271,10 @@ const Header = () => {
             : 
             <><div onClick={() => navigate('/login')} className='text-[0.9em] font-medium cursor-pointer select-none'>Log in</div><div onClick={() => navigate('/register')} className='bg-pink-700/50 px-3 py-2 rounded-md text-white text-[0.9em] font-medium cursor-pointer select-none'>Sign up</div></>
           }
-        <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`)}}} className='cursor-pointer select-none text-gray-500 fill-gray-500' />
+        <div className='relative'>
+          <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`); window.scrollTo(0, 0)}}} className='cursor-pointer select-none text-gray-500 fill-gray-500 w-7 h-7' />
+          <p className='absolute -top-2 -right-2 bg-black rounded-full w-5 h-5 flex items-center justify-center font-medium text-white text-sm'>{cart?.total_items}</p>
+        </div>
         <Menu ref={categoryRef} onClick={() => setNavbar(!navbar)} className='cursor-pointer select-none lg:hidden' />
       </div>
 

@@ -12,11 +12,14 @@ import Pending from './pages/Pending';
 import Register from './pages/Register';
 import Shipping from './pages/Shipping';
 import OrderPage from './pages/OrderPage';
+import CartProvider from './contexts/CartContext';
+import Search from './pages/Search';
 
 const App = () => {
   return (
     <Router>
           <AuthProvider>
+          <CartProvider>
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -26,6 +29,7 @@ const App = () => {
                   <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='product/:slug' element={<ProductDetails />} />
+                    <Route path='search/' element={<Search />} />
                     <Route path='*' element={<NotFound />} />
                     <Route path='cart' element={<CartPage />} />
                     <Route path='login' element={<Login />} />
@@ -33,11 +37,12 @@ const App = () => {
                     <Route path='checkout' element={<CheckOut />} />
                     <Route path='pending' element={<Pending />} />
                     <Route path='shipping' element={<Shipping />} />
-                     <Route path='order' element={<OrderPage />} />
+                    <Route path='order' element={<OrderPage />} />
                   </Routes>
                 </>
               } />
             </Routes>
+          </CartProvider>
           </AuthProvider>
     </Router>
   );

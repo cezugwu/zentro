@@ -4,36 +4,16 @@ import { X } from 'lucide-react';
 import { useQueryClient, useMutation} from '@tanstack/react-query';
 import { BASE_IMAGE_URL, BASE_URL } from '../utilis/config';
 import { useNavigate } from 'react-router-dom';
+import { addToCart, removeToCart, deleteToCart } from '../utilis/api';
 
 const CartItem = ({ item }) => {
   const { title, image, price, slug } = item?.product;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const guest = localStorage.getItem("guest")
-  const token = localStorage.getItem("access");
-  const headers = {
-    "Content-Type": "application/json",
-    ...(token && { "Authorization": `Bearer ${token}` }),
-  };
-
-  const addToCart = async ({ slug, quantity, action }) => {
-    const response = await fetch(`${BASE_URL}/add/`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        session_id: guest,
-        slug,
-        quantity,
-        action,
-      }),
-    });
-    if (!response.ok) throw new Error("failed to add to cart");
-    return response.json();
-  };
   const mutation = useMutation({
     mutationFn: addToCart,
-    onMutate: async ({ slug, quantity }) => {
+    onMutate: async ({ slug }) => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
       queryClient.setQueryData(['cart'], old => {
@@ -42,7 +22,7 @@ const CartItem = ({ item }) => {
           ...old,
           cartitem: old.cartitem.map(ci =>
             ci.product.slug === slug
-              ? { ...ci, quantity: quantity }
+              ? { ...ci, quantity: ci.quantity+1 }
               : ci
           ),
         };
@@ -59,37 +39,20 @@ const CartItem = ({ item }) => {
     },
   });
 
-  const removeToCart = async({slug}) => {
-    const response = await fetch(`${BASE_URL}/remove/`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        session_id: guest,
-        slug: slug,
-        quantity: 1,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("failed to add to cart");
-    }
-    return response.json();
-  }
   const mutationRemove = useMutation({
     mutationFn: removeToCart,
-    onMutate: async ({ slug, quantity }) => {
+    onMutate: async ({ slug }) => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
+
       queryClient.setQueryData(['cart'], old => {
         if (!old) return old;
         return {
           ...old,
-          cartitem: old.cartitem.map(ci =>
-            ci.product.slug === slug
-              ? { ...ci, quantity: quantity }
-              : ci
-          ),
+          cartitem: old.cartitem.filter(ci => ci.product.slug !== slug),
         };
       });
+
       return { previousCart };
     },
     onError: (_err, _vars, context) => {
@@ -102,36 +65,22 @@ const CartItem = ({ item }) => {
     },
   });
 
-  const deleteToCart = async({slug}) => {
-    const response = await fetch(`${BASE_URL}/delete/`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        session_id: guest,
-        slug: slug,
-      }),
-    });
-    if (!response.ok) {
-      throw new Error("failed to add to cart");
-    }
-    return response.json();
-  }
+
   const mutationDelete = useMutation({
     mutationFn: deleteToCart,
-    onMutate: async ({ slug, quantity }) => {
+    onMutate: async () => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
+      
       queryClient.setQueryData(['cart'], old => {
         if (!old) return old;
         return {
           ...old,
-          cartitem: old.cartitem.map(ci =>
-            ci.product.slug === slug
-              ? { ...ci, quantity: quantity }
-              : ci
-          ),
+          cartitem: [],
+          total_price: 0,
         };
       });
+
       return { previousCart };
     },
     onError: (_err, _vars, context) => {
@@ -159,18 +108,17 @@ const CartItem = ({ item }) => {
   }, [item.quantity]);
 
   return (
-    <div className="grid grid-cols-[4fr_1fr_1fr] items-center justify-between gap-4 py-3 border-b last:border-none text-gray-800 hover:bg-gray-50 transition-all duration-150">
-<div className="flex gap-2 items-center all group">
-  <X onClick={() => mutationDelete.mutate({ slug })} className="w-4 h-4 cursor-pointer select-none hover:scale-[1.4] hover:text-red-600 duration-300" />
+    <div className="grid grid-cols-[4fr_1fr_1fr] items-center justify-between gap-4 py-3 border-b last:border-none text-gray-800 hover:bg-gray-50 transition-all duration-150 text-sm">
+      <div className="flex gap-2 items-center all group">
+        <X onClick={() => mutationDelete.mutate({ slug })} className="w-4 h-4 cursor-pointer select-none hover:scale-[1.4] hover:text-red-600 duration-300" />
 
-  <img src={`${BASE_IMAGE_URL}/${image}`} className="w-16 aspect-square object-cover rounded-md border border-gray-400" />
+        <img src={`${BASE_IMAGE_URL}/${image}`} className="w-16 aspect-square object-cover rounded-md border border-gray-400" />
 
-  <h1 onClick={() => navigate(`/product/${slug}`)} className="flex-1 max-w-[180px] text-sm text-gray-800 hover:text-blue-600 transition-colors duration-200 cursor-pointer" >{title}</h1>
-</div>
-
+        <h1 onClick={() => navigate(`/product/${slug}`)} className="flex-1 max-w-[180px] text-sm text-gray-800 hover:text-blue-600 transition-colors duration-200 cursor-pointer" >{title}</h1>
+      </div>
 
       {/* Price */}
-      <div className="text-gray-600 text-center">${parseFloat(price).toFixed(2)}</div>
+      <div className="text-gray-600 text-center ">{Number(price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
       
       {/* Quantity */}
       <div className="flex items-center justify-center gap-2">
