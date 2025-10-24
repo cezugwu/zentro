@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 
-const categorys = ['perfume', 'trousers', 'shoe', 'handbag', 'hat', 'thermog'];
+const categorys = ['Electronics', 'Clothings'];
 const sizes = ['S', 'M', 'X', 'XL', 'XXL'];
 const Filter = ({fil, setFil, size, setSize, q, setQ}) => {
 

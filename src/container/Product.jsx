@@ -10,11 +10,32 @@ const Product = ({ product }) => {
   const queryClient = useQueryClient();
   
   const mutation = useMutation({
-    mutationFn:addToCart,
-    onSuccess:() => {
-      queryClient.invalidateQueries(['cart'])
-    }
-  })
+    mutationFn: addToCart,
+    onMutate: async ({ slug }) => {
+      await queryClient.cancelQueries(['cart']);
+      const previousCart = queryClient.getQueryData(['cart']);
+      queryClient.setQueryData(['cart'], old => {
+        if (!old) return old;
+        return {
+          ...old,
+          cartitem: old.cartitem.map(ci =>
+            ci.product.slug === slug
+              ? { ...ci, quantity: ci.quantity+1 }
+              : ci
+          ),
+        };
+      });
+      return { previousCart };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(['cart'], context.previousCart);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['cart']);
+    },
+  });
 
   return (
     <div className="space-y-1 hover:shadow-lg transition-all duration-500 p-3 rounded-md bg-white">

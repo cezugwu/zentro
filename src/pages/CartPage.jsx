@@ -11,12 +11,35 @@ const CartPage = () => {
   const navigate = useNavigate();
   const {cart, cartLoading, cartError} = useContext(CartContext)
 
+  const total_item = cart?.cartitem?.reduce((a, c) => a + c.quantity, 0);
+  const total_price = cart?.cartitem?.reduce((a, c) => a + c.quantity*c.product.price, 0);
   const shipping = 4.00;
-  const total = (Number(cart?.total_price) + shipping).toFixed(2);
+  const total = (Number(total_price) + shipping).toFixed(2);
 
-  const mutationClear = useMutation({
+
+  const  mutationClear = useMutation({
     mutationFn: clearToCart,
-    onSuccess: () => {
+    onMutate: async () => {
+      await queryClient.cancelQueries(['cart']);
+      const previousCart = queryClient.getQueryData(['cart']);
+      
+      queryClient.setQueryData(['cart'], old => {
+        if (!old) return old;
+        return {
+          ...old,
+          cartitem: [],
+          total_price: 0,
+        };
+      });
+
+      return { previousCart };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousCart) {
+        queryClient.setQueryData(['cart'], context.previousCart);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries(['cart']);
     },
   });
@@ -27,7 +50,7 @@ const CartPage = () => {
     <div className="mt-[80px] md:mt-[100px] mb-[100px] px-5 text-[0.95em] md:text-[1em]">
       {/* Header */}
       <div className="mb-6 md:mb-8 font-semibold text-gray-800">
-        You have <span className="text-red-500">{cart?.total_items}</span> item{cart?.total_items !== 1 && 's'} in your cart
+        You have <span className="text-red-500">{total_item}</span> item{total_item !== 1 && 's'} in your cart
       </div>
 
       {/* Main Layout */}
@@ -81,7 +104,7 @@ const CartPage = () => {
 
           {/* Footer */}
           <div className="flex items-center justify-between px-5 py-3 border-t text-gray-800 font-semibold">
-            <div className="flex gap-2 items-center">Total: {!cartLoading ? <span className="text-red-500 flex items-center gap-1"><div className="text-sm">NGN</div>{Number(cart?.total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> : <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>}</div>
+            <div className="flex gap-2 items-center">Total: {!cartLoading ? <span className="text-red-500 flex items-center gap-1"><div className="text-sm">NGN</div>{Number(total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> : <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>}</div>
             <button
               onClick={() => {if(cart?.cartitem.length !== 0) {mutationClear.mutate({})}}} 
               className="flex items-center gap-1 px-3 py-1 text-red-600 border border-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all duration-200"
@@ -97,7 +120,7 @@ const CartPage = () => {
 
           <div className="w-full flex justify-between text-gray-600 items-center">
             <span>Subtotal:</span>
-            {!cartLoading ? <span className="flex items-center gap-1"><div className="text-sm">NGN</div>{Number(cart?.total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> : <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>}
+            {!cartLoading ? <span className="flex items-center gap-1"><div className="text-sm">NGN</div>{Number(total_price || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> : <div className="h-4 bg-gray-300 rounded w-16 animate-pulse"></div>}
           </div>
 
 

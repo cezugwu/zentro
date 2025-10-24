@@ -44,15 +44,17 @@ const CartItem = ({ item }) => {
     onMutate: async ({ slug }) => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
-
       queryClient.setQueryData(['cart'], old => {
         if (!old) return old;
         return {
           ...old,
-          cartitem: old.cartitem.filter(ci => ci.product.slug !== slug),
+          cartitem: old.cartitem.map(ci =>
+            ci.product.slug === slug
+              ? { ...ci, quantity: ci.quantity-1 }
+              : ci
+          ),
         };
       });
-
       return { previousCart };
     },
     onError: (_err, _vars, context) => {
@@ -65,19 +67,17 @@ const CartItem = ({ item }) => {
     },
   });
 
-
   const mutationDelete = useMutation({
     mutationFn: deleteToCart,
-    onMutate: async () => {
+    onMutate: async ({ slug }) => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
-      
+
       queryClient.setQueryData(['cart'], old => {
         if (!old) return old;
         return {
           ...old,
-          cartitem: [],
-          total_price: 0,
+          cartitem: old.cartitem.filter(ci => ci.product.slug !== slug),
         };
       });
 

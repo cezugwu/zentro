@@ -1,7 +1,9 @@
 import React from 'react';
 import Heros from '../img/hero.png';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate =useNavigate();
   return (
     <section className="w-full h-[400px] md:h-[600px] bg-pink-100/50 flex flex-col lg:flex-row justify-between items-center px-6 md:px-12 lg:px-20 overflow-hidden">
       {/* LEFT CONTENT */}
@@ -20,7 +22,7 @@ const Hero = () => {
           Explore the latest designs crafted for comfort and style this autumn season.
         </p>
 
-        <button className="mt-4 bg-red-500 text-white px-5 py-2 rounded-full text-[0.9rem] md:text-[1rem] font-semibold hover:bg-red-600 transition duration-300">
+        <button onClick={() => navigate(`/search`)} className="mt-4 bg-red-500 text-white px-5 py-2 rounded-full text-[0.9rem] md:text-[1rem] font-semibold hover:bg-red-600 transition duration-300">
           Get started
         </button>
       </div>

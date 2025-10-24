@@ -44,7 +44,9 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const {cart} = useContext(CartContext)
+  console.log(cart)
 
+  const total_item = cart?.cartitem?.reduce((a, c) => a + c.quantity, 0);
 
   const [header, setHeader] = useState(false);
   useEffect(() => {
@@ -273,7 +275,7 @@ const Header = () => {
           }
         <div className='relative'>
           <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`); window.scrollTo(0, 0)}}} className='cursor-pointer select-none text-gray-500 fill-gray-500 w-7 h-7' />
-          <p className='absolute -top-2 -right-2 bg-black rounded-full w-5 h-5 flex items-center justify-center font-medium text-white text-sm'>{cart?.total_items}</p>
+          {total_item ? <p className='absolute -top-2 -right-2 bg-black rounded-full w-5 h-5 flex items-center justify-center font-medium text-white text-sm'>{total_item}</p> : ''}
         </div>
         <Menu ref={categoryRef} onClick={() => setNavbar(!navbar)} className='cursor-pointer select-none lg:hidden' />
       </div>
