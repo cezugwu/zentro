@@ -41,31 +41,52 @@ const CartItem = ({ item }) => {
 
   const mutationRemove = useMutation({
     mutationFn: removeToCart,
+
     onMutate: async ({ slug }) => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
+
       queryClient.setQueryData(['cart'], old => {
         if (!old) return old;
+
+        // Find the product to remove
+        const existingItem = old.cartitem.find(ci => ci.product.slug === slug);
+        if (!existingItem) return old;
+
+        let updatedCartItems;
+
+        // If quantity > 1, reduce it by 1
+        if (existingItem.quantity > 1) {
+          updatedCartItems = old.cartitem.map(ci =>
+            ci.product.slug === slug
+              ? { ...ci, quantity: ci.quantity - 1 }
+              : ci
+          );
+        } else {
+          // Else remove it completely
+          updatedCartItems = old.cartitem.filter(ci => ci.product.slug !== slug);
+        }
+
         return {
           ...old,
-          cartitem: old.cartitem.map(ci =>
-            ci.product.slug === slug
-              ? { ...ci, quantity: ci.quantity-1 }
-              : ci
-          ),
+          cartitem: updatedCartItems,
         };
       });
+
       return { previousCart };
     },
+
     onError: (_err, _vars, context) => {
       if (context?.previousCart) {
         queryClient.setQueryData(['cart'], context.previousCart);
       }
     },
+
     onSettled: () => {
       queryClient.invalidateQueries(['cart']);
     },
   });
+
 
   const mutationDelete = useMutation({
     mutationFn: deleteToCart,

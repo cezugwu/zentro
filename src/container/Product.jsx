@@ -11,27 +11,48 @@ const Product = ({ product }) => {
   
   const mutation = useMutation({
     mutationFn: addToCart,
-    onMutate: async ({ slug }) => {
+
+    onMutate: async ({ slug, product }) => {
       await queryClient.cancelQueries(['cart']);
       const previousCart = queryClient.getQueryData(['cart']);
+
       queryClient.setQueryData(['cart'], old => {
         if (!old) return old;
+
+        const existingItem = old.cartitem.find(ci => ci.product.slug === slug);
+
+        let updatedCartItems;
+
+        if (existingItem) {
+          // If item already exists, increase quantity
+          updatedCartItems = old.cartitem.map(ci =>
+            ci.product.slug === slug
+              ? { ...ci, quantity: ci.quantity + 1 }
+              : ci
+          );
+        } else {
+          // If item doesn't exist, add new one
+          updatedCartItems = [
+            ...old.cartitem,
+            { product, quantity: 1 },
+          ];
+        }
+
         return {
           ...old,
-          cartitem: old.cartitem.map(ci =>
-            ci.product.slug === slug
-              ? { ...ci, quantity: ci.quantity+1 }
-              : ci
-          ),
+          cartitem: updatedCartItems,
         };
       });
+
       return { previousCart };
     },
+
     onError: (_err, _vars, context) => {
       if (context?.previousCart) {
         queryClient.setQueryData(['cart'], context.previousCart);
       }
     },
+
     onSettled: () => {
       queryClient.invalidateQueries(['cart']);
     },
@@ -45,7 +66,7 @@ const Product = ({ product }) => {
           className="aspect-square object-cover rounded-md"
         />
         <ShoppingCart
-          onClick={() => mutation.mutate({ slug })}
+          onClick={() => mutation.mutate({ slug, product })}
           className="absolute bottom-3 right-3 w-10 h-10 p-2 rounded-full bg-black/60 text-white hover:bg-black duration-300 cursor-pointer select-none"
           strokeWidth={2}
         />

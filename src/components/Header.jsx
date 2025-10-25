@@ -117,6 +117,7 @@ const Header = () => {
   const [inputSearch, setInputSearch] = useState('');
   const [searchParams] = useSearchParams();
   useEffect(() => {
+    setInputSearch(searchParams?.get('q') || '');
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
         setSearch(false);
@@ -273,8 +274,8 @@ const Header = () => {
             : 
             <><div onClick={() => navigate('/login')} className='text-[0.9em] font-medium cursor-pointer select-none'>Log in</div><div onClick={() => navigate('/register')} className='bg-pink-700/50 px-3 py-2 rounded-md text-white text-[0.9em] font-medium cursor-pointer select-none'>Sign up</div></>
           }
-        <div className='relative'>
-          <ShoppingCart onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`); window.scrollTo(0, 0)}}} className='cursor-pointer select-none text-gray-500 fill-gray-500 w-7 h-7' />
+        <div onClick={() => {if(location.pathname !== '/cart'){navigate(`/cart`); window.scrollTo(0, 0)}}} className='relative cursor-pointer select-none'>
+          <ShoppingCart  className='text-gray-500 fill-gray-500 w-7 h-7' />
           {total_item ? <p className='absolute -top-2 -right-2 bg-black rounded-full w-5 h-5 flex items-center justify-center font-medium text-white text-sm'>{total_item}</p> : ''}
         </div>
         <Menu ref={categoryRef} onClick={() => setNavbar(!navbar)} className='cursor-pointer select-none lg:hidden' />
@@ -292,7 +293,7 @@ const Header = () => {
             focus:ring-2 focus:ring-gray-500 shadow-inner shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] 
             transition-all duration-300"
           />
-          <Search onClick={() => navigate(`/?q=${inputSearch}`)} className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer transition-transform duration-300 hover:scale-110" />
+          <Search onClick={() => navigate(`search/?q=${inputSearch}`)} className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer transition-transform duration-300 hover:scale-110" />
         </div>
       </div>
 
