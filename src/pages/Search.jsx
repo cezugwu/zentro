@@ -18,7 +18,7 @@ const Search = () => {
   const search = searchParams.get("q");
 
   const fetchProducts = async () => {
-    const response = await fetch(`${BASE_URL}/product/?category=${category || ""}&search=${search || ""}`);
+    const response = await fetch(`${BASE_URL}/product/?category=${categ || ""}&search=${search || ""}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -82,8 +82,7 @@ const Search = () => {
   return(
     <div className="mt-20 font-jost bg-gray-50 min-h-screen">
       {/* Breadcrumb */}
-      <div className="py-4 px-6 bg-white shadow-sm">
-        <div className="font-semibold text-xl">Shop</div>
+      <div className="py-4 px-6 shadow-sm">
         <div className="flex items-center text-sm tracking-wide text-gray-500">
           <span
             className="hover:underline cursor-pointer"
@@ -99,7 +98,7 @@ const Search = () => {
         </div>
       </div>
 
-      <div className="flex justify-around bg-gray-50 p-4 gap-6">
+      <div className="flex justify-around bg-gray-50 p-4 gap-6 text-[0.9em]">
         {/* Sidebar */}
         <div
           onMouseDown={mouseDown}
@@ -107,17 +106,16 @@ const Search = () => {
           onMouseUp={mouseUp}
           onMouseLeave={mouseLeave}
           ref={boxRef}
-          className={`h-[80vh] min-h-[300px] w-[260px] hidden lg:flex flex-col sticky top-24 overflow-auto border rounded-xl bg-white p-5 shadow-sm ${
+          className={`h-[80vh] min-h-[300px] w-[260px] hidden lg:flex flex-col sticky top-24 overflow-auto rounded-xl bg-white p-5 shadow-2xl ${
             grab ? "cursor-grab" : "cursor-grabbing"
           } scrollbar-hide`}
         >
-          <h1 className="font-medium pb-3 text-lg border-b">Categories</h1>
+          <h1 className="font-medium pb-3 text-[1em] border-b">Categories</h1>
           <div className="mt-3 space-y-3">
             {['Electronics', 'Clothings'].map((item, index) => (
               <div
                 key={index}
                 onClick={() => {
-                  setCategory(item);
                   addCategory(item);
                   window.scrollTo(0, 0);
                 }}
@@ -137,16 +135,16 @@ const Search = () => {
             ))}
           </div>
 
-          <div className="py-4 font-medium text-lg border-b mt-4">Size</div>
+          <div className="py-3 font-medium text-[1em] border-b mt-4">Size</div>
           <div className="flex gap-3 mt-3 flex-wrap">
             {sizes.map((item, index) => (
               <div
                 key={index}
                 onClick={() => setSize(item)}
-                className={`border rounded-md w-8 h-8 flex items-center justify-center cursor-pointer transition ${
+                className={`rounded-md w-8 h-8 flex items-center justify-center cursor-pointer transition ${
                   size === item
                     ? "bg-black text-white border-black"
-                    : "hover:border-black"
+                    : "hover:bg-gray-200"
                 }`}
               >
                 {item}
@@ -158,11 +156,11 @@ const Search = () => {
         {/* Main Content */}
         <div className="flex-1">
           {/* Applied Filters */}
-          <div className="flex items-center gap-4 text-lg font-semibold">
+          <div className="flex items-center gap-4 text-[1.1em]">
             <h1>Applied Filters</h1>
             <ListFilterPlus
               onClick={() => setFil(true)}
-              className="w-5 h-5 cursor-pointer md:hidden"
+              className="w-5 h-5 cursor-pointer lg:hidden"
               strokeWidth={2.5}
             />
           </div>
@@ -237,8 +235,7 @@ const Search = () => {
       <Filter
         size={size}
         setSize={setSize}
-        q={q}
-        setQ={setQ}
+        category={category}
         fil={fil}
         setFil={setFil}
       />

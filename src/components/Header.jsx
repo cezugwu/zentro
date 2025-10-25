@@ -293,7 +293,7 @@ const Header = () => {
             focus:ring-2 focus:ring-gray-500 shadow-inner shadow-[inset_0_2px_6px_rgba(0,0,0,0.25)] 
             transition-all duration-300"
           />
-          <Search onClick={() => navigate(`search/?q=${inputSearch}`)} className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer transition-transform duration-300 hover:scale-110" />
+          <Search onClick={() => {if (inputSearch) {navigate(`search/?q=${inputSearch}`); window.scrollTo(0, 0)}}} className="absolute top-1/2 right-4 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer transition-transform duration-300 hover:scale-110" />
         </div>
       </div>
 

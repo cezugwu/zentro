@@ -1,48 +1,47 @@
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 
 const categorys = ['Electronics', 'Clothings'];
 const sizes = ['S', 'M', 'X', 'XL', 'XXL'];
-const Filter = ({fil, setFil, size, setSize, q, setQ}) => {
+const Filter = ({fil, setFil, size, setSize, category}) => {
 
-const [grab, setGrab] = useState(false);
-const boxRef = useRef(null);
-const startY = useRef(0);
-const scrollTop = useRef(0);
-const [searchParams, setSearchParams] = useSearchParams();
+  const [grab, setGrab] = useState(false);
+  const boxRef = useRef(null);
+  const startY = useRef(0);
+  const scrollTop = useRef(0);
+  const [searchParams, setSearchParams] = useSearchParams();
 
 
-const mouseDown = (e) => {
-e.preventDefault();
-setGrab(true);
-if (boxRef.current) {
-    console.log(e.pageY)
-    startY.current = e.pageY;
-    scrollTop.current = boxRef.current.scrollTop;
-}
-}
+  const mouseDown = (e) => {
+  e.preventDefault();
+  setGrab(true);
+  if (boxRef.current) {
+      console.log(e.pageY)
+      startY.current = e.pageY;
+      scrollTop.current = boxRef.current.scrollTop;
+  }
+  }
 
-const mouseLeave = () => setGrab(false);
-const mouseUp = () => setGrab(false);
+  const mouseLeave = () => setGrab(false);
+  const mouseUp = () => setGrab(false);
 
-const mouseMove = (e) => {
-e.preventDefault();
-if (!grab) return;
-if (boxRef.current) {
-    const y = e.pageY;
-    const walk = y - startY.current;
-    boxRef.current.scrollTop = scrollTop.current - walk;
-}
-}
+  const mouseMove = (e) => {
+  e.preventDefault();
+  if (!grab) return;
+  if (boxRef.current) {
+      const y = e.pageY;
+      const walk = y - startY.current;
+      boxRef.current.scrollTop = scrollTop.current - walk;
+  }
+  }
 
-const addCategory = (category) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("category", category);
-    setSearchParams(params);
-};
-
+  const addCategory = (category) => {
+      const params = new URLSearchParams(searchParams);
+      params.set("category", category);
+      setSearchParams(params);
+  };
 
   const filterRef = useRef(null);
 
@@ -64,64 +63,56 @@ const addCategory = (category) => {
         ref={filterRef} 
         className={`${fil ? 'left-0' : '-left-[100%]'} 
           fixed top-0 z-20 h-[100vh] w-[260px] 
-          bg-white shadow-2xl border-r border-gray-200 
-          transition-all duration-500 ease-in-out md:hidden`}
-      >
+          bg-white/25 backdrop-blur-lg border border-white/20
+          transition-all duration-500 ease-in-out lg:hidden text-[0.9em]`}>
         {/* Scrollable content */}
-        <div 
-          onMouseDown={mouseDown} 
-          onMouseMove={mouseMove} 
-          onMouseUp={mouseUp} 
-          onMouseLeave={mouseLeave} 
+        <div
+          onMouseDown={mouseDown}
+          onMouseMove={mouseMove}
+          onMouseUp={mouseUp}
+          onMouseLeave={mouseLeave}
           ref={boxRef}
-          className={`h-[85vh] w-full overflow-y-auto px-5 py-6 
-            ${grab ? 'cursor-grab' : 'cursor-grabbing'} 
-            scrollbar-hide`}
+          className={`h-[80vh] min-h-[300px] w-[260px] flex flex-col overflow-auto p-5 shadow-sm ${
+            grab ? "cursor-grab" : "cursor-grabbing"
+          } scrollbar-hide`}
         >
-          {/* Category Section */}
-          <h1 className="font-semibold text-lg text-gray-800 pb-4 border-b">Category</h1>
-          <div className="mt-4 space-y-3">
-            {categorys.map((item, index) => (
-              <div 
-                key={index} 
-                className="flex items-center gap-3 group"
+          <div className='flex items-center justify-between border-b pb-3 text-[1.2em]'><h1>Filter</h1> <X onClick={() => setFil(false)} className='w-5 h-5 hover:text-red-500 cursor-pointer hover:scale-[1.3] select-none duration-300' /></div>
+          <h1 className="py-3 text-[1em] px-2">Categories</h1>
+          <div className="mt-3 space-y-3">
+            {['Electronics', 'Clothings'].map((item, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  addCategory(item);
+                  window.scrollTo(0, 0);
+                }}
+                className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition ${
+                  category === item
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                }`}
               >
-                {/* Checkbox style */}
-                <div 
-                  onClick={() => { setQ(item); addCategory(item); window.scrollTo(0, 0) }} 
-                  className={`w-5 h-5 flex items-center justify-center rounded-sm border 
-                    transition-all duration-300 cursor-pointer select-none
-                    ${q === item ? 'bg-black border-black' : 'border-gray-400 bg-gray-100 group-hover:border-gray-600'}`}
-                >
-                  <Check 
-                    className={`w-3 h-3 text-white transition-all 
-                      ${q === item ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}`} 
-                    strokeWidth={3} 
-                  />
-                </div>
-                <span 
-                  className={`capitalize text-sm font-medium transition-colors 
-                    ${q === item ? 'text-gray-900' : 'text-gray-600 group-hover:text-gray-800'}`}
-                >
-                  {item}
-                </span>
+                <Check
+                  className={`w-4 h-4 ${
+                    category === item ? "opacity-100" : "opacity-0"
+                  } transition`}
+                />
+                <span className="capitalize">{item}</span>
               </div>
             ))}
           </div>
 
-          {/* Size Section */}
-          <div className="pt-6 pb-3 font-semibold text-lg text-gray-800 border-b">Size</div>
-          <div className="flex flex-wrap gap-3 mt-4">
+          <div className="py-3 text-[1em] mt-4 px-2">Size</div>
+          <div className="flex gap-3 mt-3 flex-wrap">
             {sizes.map((item, index) => (
-              <div 
-                key={index} 
-                onClick={() => setSize(item)} 
-                className={`w-9 h-9 flex items-center justify-center rounded-md border 
-                  cursor-pointer select-none text-sm font-medium
-                  transition-all duration-300
-                  ${size === item 
-                    ? 'bg-black text-white border-black shadow-md scale-105' 
-                    : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 hover:border-gray-500'}`}
+              <div
+                key={index}
+                onClick={() => setSize(item)}
+                className={`rounded-md w-8 h-8 flex items-center justify-center cursor-pointer transition ${
+                  size === item
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-200"
+                }`}
               >
                 {item}
               </div>
