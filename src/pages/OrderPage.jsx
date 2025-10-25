@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import {useQuery, useQueryClient, useMutation} from '@tanstack/react-query';
-import { BASE_URL } from "../utilis/config";
+import { BASE_IMAGE_URL, BASE_URL } from "../utilis/config";
 import { ArrowUpNarrowWide } from 'lucide-react';
 
 const OrderPage = () => {
@@ -34,25 +34,87 @@ const OrderPage = () => {
   console.log(order)
 
   return(
-<div className="mt-20 m-4 space-y-4">
-  <div className="mb-6 md:mb-8 font-semibold text-gray-800 flex items-center justify-between">
-    Order history page <ArrowUpNarrowWide />
-  </div>
+<div className="mt-[90px] mb-[40px] px-4 md:px-10 text-[0.95em]">
+  <div className="max-w-5xl mx-auto space-y-10">
 
-  {order?.map((orderItem, orderIndex) => (
-    <div key={orderIndex} className="border border-black rounded-lg">
-      <div className='flex items-center justify-between bg-gray-200 rounded-t-lg p-2'><h2>Order - {orderIndex+1}</h2><p>{new Date(orderItem.updated_at).toLocaleString('en-GB', {dateStyle: 'full', timeStyle: 'short'})}</p></div>
-
-      {orderItem?.cartitem?.map((item, itemIndex) => (
-        <div key={itemIndex} className="border-b p-2">
-          <p className="font-semibold">{item.product.title}</p>
-          <p>Price: ₦{item.product.price}</p>
-          <p>Quantity: {item.quantity}</p>
-        </div>
-      ))}
+    {/* HEADER */}
+    <div className="flex items-center justify-between border-b border-gray-300 pb-3">
+      <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-500 bg-clip-text text-transparent flex items-center gap-2">
+        Order History
+        <ArrowUpNarrowWide className="w-6 h-6 text-indigo-500" />
+      </h1>
     </div>
-  ))}
+
+    {/* ORDERS */}
+    {order?.length > 0 ? (
+      order.map((orderItem, orderIndex) => (
+        <div
+          key={orderIndex}
+          className="border border-gray-200 rounded-3xl shadow-lg bg-gradient-to-br from-white to-gray-50/70 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+        >
+          {/* ORDER HEADER */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-gray-100 py-4 px-6">
+            <h2 className="font-semibold text-gray-700">
+              🛍️ Order #{orderIndex + 1}
+            </h2>
+            <p className="text-gray-500 text-sm">
+              {new Date(orderItem.updated_at).toLocaleString("en-GB", {
+                dateStyle: "full",
+                timeStyle: "short",
+              })}
+            </p>
+          </div>
+
+          {/* ITEMS */}
+          <div className="divide-y divide-gray-200">
+            {orderItem.cartitem.map((item, itemIndex) => (
+              <div
+                key={itemIndex}
+                className="flex justify-between items-center gap-4 py-4 px-6 hover:bg-gray-50/80 transition-colors duration-200"
+              >
+                {/* LEFT: Product Info */}
+                <div className="flex items-center gap-4">
+                  <img
+                    src={`${BASE_IMAGE_URL}/${item.product.image}`}
+                    className="w-16 h-16 object-cover rounded-xl border border-gray-200 shadow-sm"
+                  />
+                  <div>
+                    <p className="font-semibold text-gray-800">{item.product.title}</p>
+                    <p className="text-sm text-gray-600">
+                      NGN{item.product.price.toLocaleString()} × {item.quantity}
+                    </p>
+                  </div>
+                </div>
+
+                {/* RIGHT: Total */}
+
+              </div>
+            ))}
+          </div>
+
+          {/* FOOTER */}
+          <div className="flex justify-between items-center bg-gradient-to-r from-indigo-50 to-purple-50 border-t border-gray-100 py-4 px-6 rounded-b-3xl">
+            <p className="font-medium text-gray-700">Total Amount</p>
+            <p className="font-bold text-indigo-700 text-lg">
+              NGN
+              {orderItem.cartitem
+                .reduce(
+                  (sum, item) => sum + item.product.price * item.quantity,
+                  0
+                )
+                .toLocaleString()}
+            </p>
+          </div>
+        </div>
+      ))
+    ) : (
+      <div className="text-center text-gray-500 italic py-10">
+        You have no orders yet.
+      </div>
+    )}
+  </div>
 </div>
+
 
   );
 }
