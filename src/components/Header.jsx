@@ -229,7 +229,7 @@ const Header = () => {
           ))}
         </div>
 
-      </div>
+      </div> 
 
       <div onClick={() => {if (location.pathname !== '/') {navigate('/'); window.scrollTo(0, 0)}}} className='cursor-pointer text-[1.2em] md:text-[1.4em] lg:text-[1.6em] font-bold text-blue-900'>Zentr<span className='text-red-500'>o</span></div>
 
