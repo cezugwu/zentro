@@ -71,19 +71,36 @@ const AuthProvider = ({children}) => {
         },
     });
 
-    useEffect(() => { 
-        let timeOut = setTimeout(() => {refreshMutation.mutate();}, 0)
-        let interval;
-        if (localStorage.getItem('access')) {
-            interval = setInterval(() => {
-                refreshMutation.mutate();
-            }, REFRESH_INTERVAL);
-        }
+    useEffect(() => {
+    // Run immediately once
+    const timeOut = setTimeout(() => {
+        refreshMutation.mutate();
+    }, 0);
 
-        return () => {
-            if (interval) clearInterval(interval);
-            clearTimeout(timeOut);
-        };
+    // Define a handler function so we can add/remove it properly
+    const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible') {
+        refreshMutation.mutate();
+        }
+    };
+
+    // Add event listener
+    window.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Set interval refresh if logged in
+    let interval;
+    if (localStorage.getItem('access')) {
+        interval = setInterval(() => {
+        refreshMutation.mutate();
+        }, REFRESH_INTERVAL);
+    }
+
+    // Cleanup
+    return () => {
+        clearTimeout(timeOut);
+        if (interval) clearInterval(interval);
+        window.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
     }, []);
 
     return(
